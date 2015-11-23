@@ -60,12 +60,13 @@ class Camera {
     private void setDefaultMode(GlobalState gs) {
 
         double vprojectedlength = gs.vDist * Math.cos(gs.phi);
-        center = new Vector(gs.cnt.x, gs.cnt.y, gs.cnt.z);
         eye = new Vector(
                     Math.cos(gs.theta) * vprojectedlength,      // x
                     Math.sin(gs.theta) * vprojectedlength,      // y
                     gs.vDist * Math.sin(gs.phi)                 // z
         );
+        center = new Vector(gs.cnt.x, gs.cnt.y, gs.cnt.z);
+
     }
 
     /**
