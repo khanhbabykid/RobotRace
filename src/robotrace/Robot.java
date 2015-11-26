@@ -104,40 +104,22 @@ class Robot {
 
         }
 
-        //TORSO
-        glTranslatef(0.0, -0.3, 0.0);
+        // Torso
+        //glTranslatef(0.0, -0.3, 0.0);
         //glRotatef(0.0, 0.0, 1.0, 0.0);
         torso();
 
-        //HEAD
+        // Head
         glPushMatrix();
         glTranslatef(0.0, 0.0, TORSO_HEIGHT + 0.6 * HEAD_HEIGHT);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        //glRotatef(0.0, 0.0, 1.0, 0.0);
+        glRotatef(-90, 1.0, 0.0, 0);                    // Robot face Y-axis
         glTranslatef(0.0, -0.6 * HEAD_HEIGHT, 0.0);
         head();
         glColor3f(1, 0, 0);
         drawGlasses();     //glasses
         glPopMatrix();
 
-        double rot_x = 1.0,
-                rot_y = 0.0;
-        //Left upper arm
-        glPushMatrix();
-        glTranslatef(0.0, -(TORSO_RADIUS + UPPER_ARM_RADIUS), 0.9 * TORSO_HEIGHT);
-        glRotatef(0.0, rot_x, rot_y, 0.0);
-        left_upper_arm();
-
-        glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
-        elbow_joints();
-        glRotatef(0.0, 1.0, 0.0, 0.0);
-        left_lower_arm();
-
-        //Palm
-        glTranslatef(0.0, 0.0, LOWER_ARM_HEIGHT);
-        palms(); //left hand
-
-        glPopMatrix();
+        drawArms();
 
 //        gl.glPointSize(1);
 ////        gl.glColor3ub((byte) 255, 0, 0);  // Color Red
@@ -224,15 +206,14 @@ class Robot {
 
     void right_upper_arm() {
         glPushMatrix();
-
-        glRotatef(-90.0, 1.0, 0.0, 0.0);
+        //glRotatef(-90.0, 0, 1, 0.0);
         gluCylinder(glu.gluNewQuadric(), UPPER_ARM_RADIUS * 1.2, UPPER_ARM_RADIUS, UPPER_ARM_HEIGHT, 10, 10);
         glPopMatrix();
     }
 
     void right_lower_arm() {
         glPushMatrix();
-        glRotatef(-90.0, 1.0, 0.0, 0.0);
+        //glRotatef(-90.0, 1.0, 0.0, 0.0);
         gluCylinder(glu.gluNewQuadric(), LOWER_ARM_RADIUS * 1.1, LOWER_ARM_RADIUS, LOWER_ARM_HEIGHT, 10, 10);
         glPopMatrix();
     }
@@ -284,5 +265,40 @@ class Robot {
         gluSphere(1, 1.0, 10, 10);
         glPopMatrix();
     }
+
+    private void drawArms() {
+        // Left arm
+        glPushMatrix();
+        glTranslatef((TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
+        glRotatef(-90, 1, 0, 0.0);              //Arm to front
+        left_upper_arm();
+
+        glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
+        elbow_joints();
+        glRotatef(0.0, 1.0, 0.0, 0.0);
+        left_lower_arm();
+
+        // Left palm
+        glTranslatef(0.0, 0.0, LOWER_ARM_HEIGHT);
+        palms(); //left hand
+        glPopMatrix();
+
+        // Right arm
+        glPushMatrix();
+        glTranslatef(-(TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
+        glRotatef(-90, 1, 0.0, 0.0);
+        right_upper_arm();
+
+        glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
+        elbow_joints();
+        glRotatef(0.0, 1.0, 0.0, 0.0);
+        right_lower_arm();
+
+        glTranslatef(0.0, 0.0, LOWER_ARM_HEIGHT);
+        palms(); //left hand
+        glPopMatrix();
+    }
+
+
 
 }
