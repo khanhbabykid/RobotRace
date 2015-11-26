@@ -131,6 +131,8 @@ class Robot {
 
         drawShoulder();
 
+        drawLegJoints();
+
         glPopMatrix();
 
 //        gl.glPointSize(1);
@@ -250,24 +252,31 @@ class Robot {
     }
 
     private void drawLegs() {
+
+        //Left leg
         glPushMatrix();
         glTranslatef(-(TORSO_RADIUS), 0.0, 0.1 * UPPER_LEG_HEIGHT);
-        glRotatef(180, 1.0, 0.0, 0.0);                                          // Rotate left leg
+        glRotatef(185, 1.0, 0.0, 0.0);                                          // Rotate left leg
         left_upper_leg();                                                       // Draw left leg
         glTranslatef(0, 0.0, UPPER_LEG_HEIGHT);
         knee_joints();
-        glRotatef(0.0, 1.0, 0.0, 0.0);
+        glRotatef(-10, 1.0, 0.0, 0.0);
         left_lower_leg();
+        glTranslatef(0, 0, LOWER_LEG_HEIGHT);
+        palms();
         glPopMatrix();
 
+        //Right leg
         glPushMatrix();
         glTranslatef((TORSO_RADIUS), 0.0, 0.1 * UPPER_LEG_HEIGHT);
-        glRotatef(180, 1.0, 0.0, 0.0);
+        glRotatef(185, 1.0, 0.0, 0.0);
         right_upper_leg();
         glTranslatef(0.0, 0, UPPER_LEG_HEIGHT);
         knee_joints();
-        glRotatef(0, 1.0, 0.0, 0.0);
+        glRotatef(-10, 1.0, 0.0, 0.0);
         right_lower_leg();
+        glTranslatef(0, 0, LOWER_LEG_HEIGHT);
+        palms();
         glPopMatrix();
 
     }
@@ -278,7 +287,7 @@ class Robot {
      */
     private void drawGlasses() {
         glPushMatrix();
-        glTranslatef(0.0, 0.5 * HEAD_HEIGHT, 0.075);
+        glTranslatef(0.0, 0.35 * HEAD_HEIGHT, 0.2*HEAD_HEIGHT);
         glRotatef(-90.0, 1.0, 0.0, 0.0);
         gluCylinder(glu.gluNewQuadric(), HEAD_RADIUS, HEAD_RADIUS, HEAD_HEIGHT / 2, 10, 10);
         glPopMatrix();
@@ -392,6 +401,17 @@ class Robot {
         glPushMatrix();
         glScalef(SHOULDER_RADIUS, SHOULDER_RADIUS, SHOULDER_RADIUS);
         gluSphere(1, 1.0, 10, 10);
+        glPopMatrix();
+    }
+
+    private void drawLegJoints() {
+        //leg_joints
+        glPushMatrix();
+        glTranslatef(1.1 * TORSO_RADIUS, 0.0, 0.0);
+        leg_joints();
+
+        glTranslatef(-2.2 * TORSO_RADIUS, 0.0, 0.0);
+        shoulder_joints();
         glPopMatrix();
     }
 
