@@ -1,9 +1,14 @@
 package robotrace;
 
 import com.jogamp.opengl.util.gl2.GLUT;
+import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_LINES;
 
 import javax.media.opengl.GL2;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -56,9 +61,9 @@ class Robot {
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material
-    /* add other parameters that characterize this robot */) {
+    public Robot(Material material, Vector position) {
         this.material = material;
+        this.position = position;
 
         // code goes here ...
     }
@@ -87,7 +92,7 @@ class Robot {
         glu.gluCylinder(glu.gluNewQuadric(), b, c, d, e, f);
     }
 
-    private void gluSphere(Object gluNewQuadric, double d, int i, int i0) {
+    private void gluSphere(Object a, double d, int i, int i0) {
         glu.gluSphere(glu.gluNewQuadric(), d, i, i0);
     }
 
@@ -105,8 +110,14 @@ class Robot {
         Robot.glu = glu;
         Robot.stickFigure = stickFigure;
 
+        gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse, 0);
+        gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular, 0);
+        gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.shininess);
+
         glPushMatrix();
-//        glRotatef(-90, 0, 0, 1);      //Rotate robot around Z-axis
+
+        // Robot position
+        glTranslatef(position.x(), position.y(), position.z());
 
         // Torso
         drawTorso();
@@ -117,19 +128,15 @@ class Robot {
         glRotatef(-90, 1.0, 0.0, 0);                    // Robot face Y-axis
         glTranslatef(0.0, -0.6 * HEAD_HEIGHT, 0.0);
         drawHead();
-        glColor3f(1, 0, 0);
+//        glColor3f(1, 0, 0);
         drawGlasses();     //glasses
-        glColor3f(0, 0, 0);
+//        glColor3f(0, 0, 0);
         glPopMatrix();
 
-        drawArms();
-
-        drawLegs();
-
         drawTorsoTop();
-
         drawShoulder();
-
+        drawArms();
+        drawLegs();
         drawLegJoints();
 
         glPopMatrix();
@@ -173,7 +180,7 @@ class Robot {
         glPushMatrix();
         glTranslatef(1.5 * TORSO_RADIUS, 0.0, 0.9 * TORSO_HEIGHT);
         if (stickFigure) {
-            glTranslatef(0, -0.1*TORSO_HEIGHT, -TORSO_HEIGHT);
+            glTranslatef(0, -0.1 * TORSO_HEIGHT, -TORSO_HEIGHT);
             gl.glBegin(GL_LINES);
             gl.glVertex3f(0, 0, 0); // Base of the torso.
             gl.glVertex3d(-3 * TORSO_RADIUS, 0, 0); // End of the leg.
@@ -224,7 +231,7 @@ class Robot {
     private void drawLegs() {
         //Left leg
         glPushMatrix();
-        glTranslatef(-(TORSO_RADIUS), 0.0, 0.1 * UPPER_LEG_HEIGHT);
+        glTranslatef(-(TORSO_RADIUS - 0.07), 0.0, 0.1 * UPPER_LEG_HEIGHT);
         glRotatef(185, 1.0, 0.0, 0.0);                                          // Rotate left leg
         left_upper_leg();                                                       // Draw left leg
         glTranslatef(0, 0.0, UPPER_LEG_HEIGHT);
@@ -237,7 +244,7 @@ class Robot {
 
         //Right leg
         glPushMatrix();
-        glTranslatef((TORSO_RADIUS), 0.0, 0.1 * UPPER_LEG_HEIGHT);
+        glTranslatef((TORSO_RADIUS - 0.07), 0.0, 0.1 * UPPER_LEG_HEIGHT);
         glRotatef(185, 1.0, 0.0, 0.0);
         right_upper_leg();
         glTranslatef(0.0, 0, UPPER_LEG_HEIGHT);
@@ -250,7 +257,7 @@ class Robot {
 
     }
 
-    // Methods
+    // Utils methods
     /*
      DRAW GLASSES:
      */
@@ -438,20 +445,19 @@ class Robot {
     }
 
     private void drawLegJoints() {
-        //leg_joints
         glPushMatrix();
         if (stickFigure) {
-//            // Draw hips
-//            glTranslatef(1.1 * TORSO_RADIUS, 0.0, 0.0);
-//            gl.glBegin(GL_LINES);
-//            gl.glVertex3f(0, 0, 0); // Base of the torso.
-//            gl.glVertex3d(-2.2 * TORSO_RADIUS, 0, 0); // End of the leg.
-//            gl.glEnd();
+            // Draw hips
+            glTranslatef(1.1 * TORSO_RADIUS, 0.0, 0.0);
+            gl.glBegin(GL_LINES);
+            gl.glVertex3f(0, 0, 0); // Base of the torso.
+            gl.glVertex3d(-2.2 * TORSO_RADIUS, 0, 0); // End of the leg.
+            gl.glEnd();
         } else {
 
-            glTranslatef(1.1 * TORSO_RADIUS, 0.0, 0.0);
+            glTranslatef(TORSO_RADIUS - 0.07, 0.0, 0.0);
             leg_joints();
-            glTranslatef(-2.2 * TORSO_RADIUS, 0.0, 0.0);
+            glTranslatef(-2 * (TORSO_RADIUS - 0.07), 0.0, 0.0);
             leg_joints();
 
         }

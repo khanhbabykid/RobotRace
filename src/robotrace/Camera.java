@@ -66,7 +66,6 @@ class Camera {
                     gs.vDist * Math.sin(gs.phi)                 // z
         );
         center = new Vector(gs.cnt.x, gs.cnt.y, gs.cnt.z);
-
     }
 
     /**

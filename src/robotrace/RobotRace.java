@@ -2,8 +2,7 @@ package robotrace;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.toDegrees;
-import javax.media.opengl.GL;
-import static javax.media.opengl.GL.GL_LINES;
+
 import static javax.media.opengl.GL2.*;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
@@ -71,20 +70,16 @@ public class RobotRace extends Base {
         robots = new Robot[4];
 
         // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD
-        /* add other parameters that characterize this robot */);
+        robots[0] = new Robot(Material.GOLD, Vector.O);
 
         // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER
-        /* add other parameters that characterize this robot */);
+        robots[1] = new Robot(Material.SILVER, new Vector(1.2, 0, 0));
 
         // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD
-        /* add other parameters that characterize this robot */);
+        robots[2] = new Robot(Material.WOOD, new Vector(2.4, 0, 0));
 
         // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE
-        /* add other parameters that characterize this robot */);
+        robots[3] = new Robot(Material.ORANGE, new Vector(3.6, 0, 0));
 
         // Initialize the camera
         camera = new Camera();
@@ -136,6 +131,10 @@ public class RobotRace extends Base {
         gl.glEnable(GL_TEXTURE_2D);
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
         gl.glBindTexture(GL_TEXTURE_2D, 0);
+
+        // Enable light 0 and lighting
+        gl.glEnable(GL_LIGHT0);
+        gl.glEnable(GL_LIGHTING);
 
         // Try to load four textures, add more if you like.
         track = loadTexture("track.jpg");
@@ -195,7 +194,9 @@ public class RobotRace extends Base {
 
         // Draw the axis frame.
         if (gs.showAxes) {
+            gl.glEnable(GL_COLOR_MATERIAL);
             drawAxisFrame();
+            gl.glDisable(GL_COLOR_MATERIAL);
         }
 
         // Get the position and direction of the first robot.
@@ -204,6 +205,9 @@ public class RobotRace extends Base {
 
         // Draw the first robot.
         robots[0].draw(gl, glu, glut, gs.showStick, gs.tAnim);
+        robots[1].draw(gl, glu, glut, gs.showStick, gs.tAnim);
+        robots[2].draw(gl, glu, glut, gs.showStick, gs.tAnim);
+        robots[3].draw(gl, glu, glut, gs.showStick, gs.tAnim);
 
         // Draw the race track.
         raceTracks[gs.trackNr].draw(gl, glu, glut);
