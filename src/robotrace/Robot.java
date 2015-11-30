@@ -123,9 +123,6 @@ class Robot {
         // Robot position
         glTranslatef(position.x(), position.y(), UPPER_LEG_HEIGHT + LOWER_LEG_HEIGHT);
 
-        // Torso
-        drawTorso();
-
         // Head
         glPushMatrix();
         glTranslatef(0.0, 0.0, TORSO_HEIGHT + 0.6 * HEAD_HEIGHT);
@@ -134,12 +131,27 @@ class Robot {
         drawHead();
         glPopMatrix();
 
+        // Torso
+        drawTorso();
         drawTorsoTop();
         drawShoulder();
         drawArms();
         drawLegs();
         drawLegJoints();
 
+        glPopMatrix();
+
+    }
+
+    private void drawHead() {
+        glPushMatrix();
+        glTranslatef(0.0, 0.5 * HEAD_HEIGHT, 0.0);
+//        if (!stickFigure) {
+        glScalef(HEAD_RADIUS, HEAD_HEIGHT, HEAD_RADIUS);
+        gluSphere(glu.gluNewQuadric(), 1.0, 10, 10);
+//        } else {
+//
+//        }
         glPopMatrix();
 
     }
@@ -158,19 +170,6 @@ class Robot {
             glPopMatrix();
         }
         glPopMatrix();
-    }
-
-    private void drawHead() {
-        glPushMatrix();
-        glTranslatef(0.0, 0.5 * HEAD_HEIGHT, 0.0);
-//        if (!stickFigure) {
-        glScalef(HEAD_RADIUS, HEAD_HEIGHT, HEAD_RADIUS);
-        gluSphere(glu.gluNewQuadric(), 1.0, 10, 10);
-//        } else {
-//
-//        }
-        glPopMatrix();
-
     }
 
     private void drawTorsoTop() {
@@ -208,10 +207,15 @@ class Robot {
     }
 
     private void drawArms() {
-        // Left arm
+        // right arm
         glPushMatrix();
         glTranslatef((TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
-        glRotatef(-90, 1, 0, 0.0);              //Arm to front
+
+        /*
+         Rotating right upper arm
+         Initially pointing upwards
+         */
+        glRotatef(-70, 1, 0, 0.0);
 
         if (stickFigure) {
             glPushMatrix();
@@ -221,12 +225,17 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            left_upper_arm();
+            upper_arm();
         }
 
         glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
         elbow_joints();
+
+        /*
+         Rotating right lower arm
+         */
         glRotatef(0.0, 1.0, 0.0, 0.0);
+
         if (stickFigure) {
             glPushMatrix();
             glTranslatef(0, 0, LOWER_ARM_HEIGHT / 2);
@@ -235,7 +244,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            left_lower_arm();
+            lower_arm();
         }
 
         // Left palm
@@ -243,10 +252,15 @@ class Robot {
         palms(); //left hand
         glPopMatrix();
 
-        // Right arm
+        // Left arm
         glPushMatrix();
         glTranslatef(-(TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
-        glRotatef(-90, 1, 0.0, 0.0);
+
+        /*
+         Rotating left upper arm
+         Initially pointing upwards
+         */
+        glRotatef(-180, 1, 0.0, 0.0);
         if (stickFigure) {
             glPushMatrix();
             glTranslatef(0, 0, UPPER_ARM_HEIGHT / 2);
@@ -255,11 +269,15 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            right_upper_arm();
+            upper_arm();
         }
 
         glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
         elbow_joints();
+
+        /*
+         Rotating Left lower arm
+         */
         glRotatef(0.0, 1.0, 0.0, 0.0);
         if (stickFigure) {
             glPushMatrix();
@@ -269,7 +287,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            right_lower_arm();
+            lower_arm();
         }
 
         glTranslatef(0.0, 0.0, LOWER_ARM_HEIGHT);
@@ -290,7 +308,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            left_upper_leg();                                                       // Draw left leg
+            upper_leg();                                                       // Draw left leg
         }
         glTranslatef(0, 0.0, UPPER_LEG_HEIGHT);
         knee_joints();
@@ -303,7 +321,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            left_lower_leg();
+            lower_leg();
         }
         glTranslatef(0, 0, LOWER_LEG_HEIGHT);
         palms();
@@ -321,7 +339,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            right_upper_leg();
+            upper_leg();
         }
         glTranslatef(0.0, 0, UPPER_LEG_HEIGHT);
         knee_joints();
@@ -334,7 +352,7 @@ class Robot {
             glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
-            right_lower_leg();
+            lower_leg();
         }
         glTranslatef(0, 0, LOWER_LEG_HEIGHT);
         palms();
@@ -347,25 +365,13 @@ class Robot {
     /*
      DRAWING ARMS:
      */
-    void left_upper_arm() {
+    void upper_arm() {
         glPushMatrix();
         gluCylinder(glu.gluNewQuadric(), UPPER_ARM_RADIUS * 1.2, UPPER_ARM_RADIUS, UPPER_ARM_HEIGHT, 10, 10);
         glPopMatrix();
     }
 
-    void left_lower_arm() {
-        glPushMatrix();
-        gluCylinder(glu.gluNewQuadric(), LOWER_ARM_RADIUS * 1.1, LOWER_ARM_RADIUS, LOWER_ARM_HEIGHT, 10, 10);
-        glPopMatrix();
-    }
-
-    void right_upper_arm() {
-        glPushMatrix();
-        gluCylinder(glu.gluNewQuadric(), UPPER_ARM_RADIUS * 1.2, UPPER_ARM_RADIUS, UPPER_ARM_HEIGHT, 10, 10);
-        glPopMatrix();
-    }
-
-    void right_lower_arm() {
+    void lower_arm() {
         glPushMatrix();
         gluCylinder(glu.gluNewQuadric(), LOWER_ARM_RADIUS * 1.1, LOWER_ARM_RADIUS, LOWER_ARM_HEIGHT, 10, 10);
         glPopMatrix();
@@ -374,35 +380,17 @@ class Robot {
     /*
      DRAWING LEGS:
      */
-    void left_upper_leg() {
-        glColor3f(1.0, 0.0, 1.0);
-        glPushMatrix();
-        gluCylinder(glu.gluNewQuadric(), UPPER_LEG_RADIUS * 1.2, UPPER_LEG_RADIUS, UPPER_LEG_HEIGHT, 10, 10);
-        glPopMatrix();
-    }
-
-    void left_lower_leg() {
-        glColor3f(1.0, 0.0, 0.0);
-        glPushMatrix();
-        gluCylinder(glu.gluNewQuadric(), LOWER_LEG_RADIUS * 1.2, LOWER_LEG_RADIUS, LOWER_LEG_HEIGHT, 10, 10);
-        glPopMatrix();
-    }
-
-    void right_upper_leg() {
+    void upper_leg() {
         glColor3f(1.0f, 0.0f, 1.0f);
         glPushMatrix();
-
         gluCylinder(glu.gluNewQuadric(), UPPER_LEG_RADIUS * 1.2, UPPER_LEG_RADIUS, UPPER_LEG_HEIGHT, 10, 10);
-
         glPopMatrix();
     }
 
-    void right_lower_leg() {
+    void lower_leg() {
         glColor3f(1.0, 0.0, 0.0);
         glPushMatrix();
-
         gluCylinder(glu.gluNewQuadric(), LOWER_LEG_RADIUS * 1.2, LOWER_LEG_RADIUS, LOWER_LEG_HEIGHT, 10, 10);
-
         glPopMatrix();
     }
 

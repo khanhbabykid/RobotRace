@@ -135,7 +135,7 @@ public class RobotRace extends Base {
         // Enable light 0 and lighting
         gl.glEnable(GL_LIGHT0);
         gl.glEnable(GL_LIGHTING);
-
+        
         // Try to load four textures, add more if you like.
         track = loadTexture("track.jpg");
         brick = loadTexture("brick.jpg");
@@ -155,7 +155,7 @@ public class RobotRace extends Base {
         gl.glMatrixMode(GL_PROJECTION);
         gl.glLoadIdentity();
 
-//         Set the perspective.
+        //Set the perspective.
         //The angle is calculated using the distance between the eye point and the center point
         //and the width given by the assignment
         double fovy = toDegrees(atan2(gs.vWidth / 2, gs.vDist)) * 2;
@@ -194,9 +194,9 @@ public class RobotRace extends Base {
 
         // Draw the axis frame.
         if (gs.showAxes) {
-            gl.glEnable(GL_COLOR_MATERIAL);
+            gl.glEnable(GL_COLOR_MATERIAL); //Enable color for axis frame
             drawAxisFrame();
-            gl.glDisable(GL_COLOR_MATERIAL);
+            gl.glDisable(GL_COLOR_MATERIAL); //Disable color after drawing
         }
 
         // Get the position and direction of the first robot.
@@ -223,29 +223,30 @@ public class RobotRace extends Base {
      */
     public void drawAxisFrame() {
 
+        int axisLength = 1;
         // Draw axis by separate lines
         gl.glBegin(GL_LINES);
         // draw X
         gl.glColor3f(1, 0, 0);
         gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(2, 0, 0);
+        gl.glVertex3f(axisLength, 0, 0);
 
         // draw Y
         gl.glColor3f(0, 1, 0);
         gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 2, 0);
+        gl.glVertex3f(0, axisLength, 0);
 
         // draw Z
         gl.glColor3f(0, 0, 1);
         gl.glVertex3f(0, 0, 0);
-        gl.glVertex3f(0, 0, 2);
+        gl.glVertex3f(0, 0, axisLength);
 
         gl.glEnd();
 
         // draw cone X
         gl.glPushMatrix();                          // Save previous state
         gl.glColor3f(1, 0, 0);
-        gl.glTranslatef(2, 0, 0);
+        gl.glTranslatef(axisLength, 0, 0);
         gl.glRotatef(90, 0, 1, 0);                  // Rotate around y-axis
         glut.glutSolidCone(0.1, 0.2, 16, 16);
         gl.glPopMatrix();                           // restore after drawing cone
@@ -253,7 +254,7 @@ public class RobotRace extends Base {
         // draw cone Y
         gl.glPushMatrix();
         gl.glColor3f(0, 1, 0);
-        gl.glTranslatef(0, 2, 0);
+        gl.glTranslatef(0, axisLength, 0);
         gl.glRotatef(270, 1, 0, 0);                 // Rotate around x-axis
         glut.glutSolidCone(0.1, 0.2, 16, 16);
         gl.glPopMatrix();
@@ -261,7 +262,7 @@ public class RobotRace extends Base {
         // draw cone Z, rotate around x-axis and point upwards, hence no rotation needed
         gl.glPushMatrix();
         gl.glColor3f(0, 0, 1);
-        gl.glTranslatef(0, 0, 2);
+        gl.glTranslatef(0, 0, axisLength);
         glut.glutSolidCone(0.1, 0.2, 16, 16);
         gl.glPopMatrix();
 
