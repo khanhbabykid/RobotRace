@@ -3,6 +3,7 @@ package robotrace;
 import com.jogamp.opengl.util.gl2.GLUT;
 import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
 import static javax.media.opengl.GL.GL_LINES;
+import static javax.media.opengl.GL.GL_LINE_LOOP;
 
 import javax.media.opengl.GL2;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
@@ -115,15 +116,12 @@ class Robot {
         Robot.glu = glu;
         Robot.stickFigure = stickFigure;
 
-        //ADDING STICKFIGURE - REMOVE WHEN DONE
-        Robot.stickFigure = true;
-
         addMaterialColor();
 
         glPushMatrix();
 
         // Robot position
-        glTranslatef(position.x(), position.y(), position.z());
+        glTranslatef(position.x(), position.y(), UPPER_LEG_HEIGHT + LOWER_LEG_HEIGHT);
 
         // Torso
         drawTorso();
@@ -169,9 +167,7 @@ class Robot {
         glScalef(HEAD_RADIUS, HEAD_HEIGHT, HEAD_RADIUS);
         gluSphere(glu.gluNewQuadric(), 1.0, 10, 10);
 //        } else {
-//            gl.glPushMatrix();
-////            gluSphere(glu.gluNewQuadric(), 1.0, 10, 10);
-//            gl.glPopMatrix();
+//
 //        }
         glPopMatrix();
 
@@ -434,9 +430,6 @@ class Robot {
     }
 
     void leg_joints() {
-        if (stickFigure) {
-            return;
-        }
         glPushMatrix();
         glScalef(JOINT_RADIUS, JOINT_RADIUS, JOINT_RADIUS);
         gluSphere(1, 1.0, 10, 10);
@@ -469,10 +462,19 @@ class Robot {
 
     private void drawLegJoints() {
         glPushMatrix();
-        glTranslatef(TORSO_RADIUS - 0.07, 0.0, 0.0);
-        leg_joints();
-        glTranslatef(-2 * (TORSO_RADIUS - 0.07), 0.0, 0.0);
-        leg_joints();
+        if (!stickFigure) {
+            glTranslatef(TORSO_RADIUS - 0.07, 0.0, 0.0);
+            leg_joints();
+            glTranslatef(-2 * (TORSO_RADIUS - 0.07), 0.0, 0.0);
+            leg_joints();
+        } else {
+            glPushMatrix();
+            glRotatef(-90, 0, 1, 0);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, 2 * (TORSO_RADIUS - 0.07));
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        }
         glPopMatrix();
     }
 
