@@ -286,11 +286,29 @@ class Robot {
         glPushMatrix();
         glTranslatef(-(TORSO_RADIUS - 0.07), 0.0, 0.1 * UPPER_LEG_HEIGHT);
         glRotatef(185, 1.0, 0.0, 0.0);                                          // Rotate left leg
-        left_upper_leg();                                                       // Draw left leg
+        if (stickFigure) {
+            glPushMatrix();
+            glTranslatef(0, 0, UPPER_LEG_HEIGHT / 2);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, UPPER_LEG_HEIGHT);
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        } else {
+            left_upper_leg();                                                       // Draw left leg
+        }
         glTranslatef(0, 0.0, UPPER_LEG_HEIGHT);
         knee_joints();
         glRotatef(-10, 1.0, 0.0, 0.0);
-        left_lower_leg();
+        if (stickFigure) {
+            glPushMatrix();
+            glTranslatef(0, 0, LOWER_LEG_HEIGHT / 2);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, LOWER_LEG_HEIGHT);
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        } else {
+            left_lower_leg();
+        }
         glTranslatef(0, 0, LOWER_LEG_HEIGHT);
         palms();
         glPopMatrix();
@@ -299,11 +317,29 @@ class Robot {
         glPushMatrix();
         glTranslatef((TORSO_RADIUS - 0.07), 0.0, 0.1 * UPPER_LEG_HEIGHT);
         glRotatef(185, 1.0, 0.0, 0.0);
-        right_upper_leg();
+        if (stickFigure) {
+            glPushMatrix();
+            glTranslatef(0, 0, UPPER_LEG_HEIGHT / 2);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, UPPER_LEG_HEIGHT);
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        } else {
+            right_upper_leg();
+        }
         glTranslatef(0.0, 0, UPPER_LEG_HEIGHT);
         knee_joints();
         glRotatef(-10, 1.0, 0.0, 0.0);
-        right_lower_leg();
+        if (stickFigure) {
+            glPushMatrix();
+            glTranslatef(0, 0, LOWER_LEG_HEIGHT / 2);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, LOWER_LEG_HEIGHT);
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        } else {
+            right_lower_leg();
+        }
         glTranslatef(0, 0, LOWER_LEG_HEIGHT);
         palms();
         glPopMatrix();
