@@ -55,6 +55,7 @@ class Robot {
         this.material = material;
         this.position = position;
 
+        //Default robot configurations
         this.torsoHeight = 1;
         this.torsoRadius = 0.26;
         this.headHeight = 0.34;
@@ -92,7 +93,7 @@ class Robot {
      * @param lowerLegRadius in double
      * @param shoulderRadius in double
      * @param jointRadius in double
-     * @param glassesOn in boolean
+     * @param glassesOn whether the robot should wear glasses
      */
     public Robot(Material material, Vector position, double torsoHeight, double torsoRadius, double headHeight, double headRadius,
             double upperArmHeight, double upperArmRadius, double lowerArmHeight, double lowerArmRadius,
@@ -177,8 +178,7 @@ class Robot {
         addMaterialColor();
 
         glPushMatrix();
-
-        // Robot position
+        // Current robot position, robot should be on the ground (above xy-plane)
         glTranslatef(position.x(), position.y(), upperLegHeight + lowerLegHeight);
 
         // Head
@@ -188,15 +188,13 @@ class Robot {
         glTranslatef(0.0, -0.6 * headHeight, 0.0);
         drawHead();
         glPopMatrix();
-
-        // Torso
+        
         drawTorso();
         drawTorsoTop();
         drawShoulderJoints();
         drawArms();
         drawLegs();
         drawLegJoints();
-
         glPopMatrix();
 
     }
@@ -518,7 +516,7 @@ class Robot {
         glPopMatrix();
     }
 
-    private void drawLegJoints() {
+    void drawLegJoints() {
         glPushMatrix();
         if (!stickFigure) {
             glTranslatef(torsoRadius - 0.07, 0.0, 0.0);
