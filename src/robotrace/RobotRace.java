@@ -136,6 +136,10 @@ public class RobotRace extends Base {
         gl.glEnable(GL_LIGHT0);
         gl.glEnable(GL_LIGHTING);
         
+        // Light position
+//        float position = {};
+//        gl.glLightfv(GL_LIGHT0, GL_POSITION, position, 0);
+        
         // Try to load four textures, add more if you like.
         track = loadTexture("track.jpg");
         brick = loadTexture("brick.jpg");
@@ -157,7 +161,7 @@ public class RobotRace extends Base {
 
         //Set the perspective.
         //The angle is calculated using the distance between the eye point and the center point
-        //and the width given by the assignment
+        //and the given vWidth
         double fovy = toDegrees(atan2(gs.vWidth / 2, gs.vDist)) * 2;
         glu.gluPerspective((int) fovy, (float) gs.w / (float) gs.h, 0.1 * gs.vDist, 10.0 * gs.vDist);
 
