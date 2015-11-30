@@ -216,13 +216,13 @@ class Robot {
         glPushMatrix();
         glTranslatef((TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
         glRotatef(-90, 1, 0, 0.0);              //Arm to front
+
         if (stickFigure) {
             glPushMatrix();
+            glTranslatef(0, 0, UPPER_ARM_HEIGHT / 2);
             glColor3f(1.0f, 0, 0);
-            gl.glBegin(GL_LINES);
-            gl.glVertex3d(0, 0, 0);
-            gl.glVertex3d(0, 0, 1f);
-            gl.glEnd();
+            glScalef(0.05f, 0.05f, UPPER_ARM_HEIGHT);
+            glut.glutSolidCube(1f);
             glPopMatrix();
         } else {
             left_upper_arm();
@@ -242,7 +242,16 @@ class Robot {
         glPushMatrix();
         glTranslatef(-(TORSO_RADIUS + UPPER_ARM_RADIUS), 0, 0.9 * TORSO_HEIGHT);
         glRotatef(-90, 1, 0.0, 0.0);
-        right_upper_arm();
+        if (stickFigure) {
+            glPushMatrix();
+            glTranslatef(0, 0, UPPER_ARM_HEIGHT / 2);
+            glColor3f(1.0f, 0, 0);
+            glScalef(0.05f, 0.05f, UPPER_ARM_HEIGHT);
+            glut.glutSolidCube(1f);
+            glPopMatrix();
+        } else {
+            right_upper_arm();
+        }
 
         glTranslatef(0.0, 0.0, UPPER_ARM_HEIGHT);
         elbow_joints();
@@ -351,6 +360,8 @@ class Robot {
      DRAWING JOINTS
      */
     void elbow_joints() {
+        if(stickFigure)
+            return;
         glPushMatrix();
         glScalef(SHOULDER_RADIUS / 1.2, SHOULDER_RADIUS / 1.2, SHOULDER_RADIUS / 1.2);
         gluSphere(glu.gluNewQuadric(), 1.0, 10, 10);
@@ -358,6 +369,8 @@ class Robot {
     }
 
     void palms() {
+        if(stickFigure)
+            return;
         glPushMatrix();
         glScalef(SHOULDER_RADIUS / 1.3, SHOULDER_RADIUS / 1.3, SHOULDER_RADIUS / 1.3);
         gluSphere(1, 1.0, 10, 10);
@@ -365,6 +378,8 @@ class Robot {
     }
 
     void leg_joints() {
+        if(stickFigure)
+            return;
         glPushMatrix();
         glScalef(JOINT_RADIUS, JOINT_RADIUS, JOINT_RADIUS);
         gluSphere(1, 1.0, 10, 10);
@@ -372,6 +387,8 @@ class Robot {
     }
 
     void knee_joints() {
+        if(stickFigure)
+            return;
         glPushMatrix();
         glScalef(JOINT_RADIUS, JOINT_RADIUS, JOINT_RADIUS);
         gluSphere(1, 1.0, 10, 10);
@@ -380,10 +397,8 @@ class Robot {
 
     void torsoTop() {
         glPushMatrix();
-
         glScalef(1.2 * TORSO_RADIUS, 0.1, 1.2 * TORSO_RADIUS);
         gluSphere(1, 1.0, 10, 10);
-
         glPopMatrix();
     }
 
